@@ -8,6 +8,7 @@ import Travel from "./pages/genres/Travel";
 import Aerial from "./pages/genres/Aerial";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import Upload from "./pages/Upload";
 
 export default function App() {
     return (
@@ -21,6 +22,7 @@ export default function App() {
             <Route path="/portfolio/aerials" element={<Aerial />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/upload" element={<Upload />} />
         </Routes>
     );
 }
