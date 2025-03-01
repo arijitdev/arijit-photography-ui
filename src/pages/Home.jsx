@@ -1,4 +1,4 @@
-import { Flex, Box, Heading, Text, Button } from "@chakra-ui/react";
+import { Flex, Box, Heading, Text, Button, Link } from "@chakra-ui/react";
 import PageLayout from "../layouts/PageLayout";
 
 export default function Home() {
@@ -61,9 +61,8 @@ export default function Home() {
                         textTransform="uppercase"
                         letterSpacing="wide"
                         _hover={{ bg: "white", color: "black" }}
-                        onClick={() => (window.location.href = "/portfolio")}
                     >
-                        View Portfolio
+                        <Link to="/portfolio">View Portfolio</Link>
                     </Button>
                 </Box>
             </Flex>
