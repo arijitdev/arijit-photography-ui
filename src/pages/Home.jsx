@@ -1,4 +1,5 @@
-import { Flex, Box, Heading, Text, Button } from "@chakra-ui/react";
+import { Flex, Box, Heading, Text,  Button, Link as ChakraLink } from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
 import PageLayout from "../layouts/PageLayout";
 
 export default function Home() {
@@ -48,23 +49,24 @@ export default function Home() {
                     </Text>
 
                     {/* Update button to match Wix "View More" style */}
-                    <Button
-                        bg="transparent"
-                        border="1px solid white"
-                        color="white"
-                        fontFamily="'Cinzel', serif"
-                        fontWeight="300"
-                        fontSize="lg"
-                        px={2}
-                        py={1}
-                        borderRadius="0"
-                        textTransform="uppercase"
-                        letterSpacing="wide"
-                        _hover={{ bg: "white", color: "black" }}
-                        onClick={() => (window.location.href = "portfolio")}
-                    >
-                        View Portfolio
-                    </Button>
+                    <ChakraLink as={RouterLink} to="/portfolio" style={{ textDecoration: 'none' }}>
+                        <Button
+                            bg="transparent"
+                            border="1px solid white"
+                            color="white"
+                            fontFamily="'Cinzel', serif"
+                            fontWeight="300"
+                            fontSize="lg"
+                            px={2}
+                            py={1}
+                            borderRadius="0"
+                            textTransform="uppercase"
+                            letterSpacing="wide"
+                            _hover={{ bg: "white", color: "black" }}
+                        >
+                            View Portfolio
+                        </Button>
+                    </ChakraLink>
                 </Box>
             </Flex>
         </PageLayout>
