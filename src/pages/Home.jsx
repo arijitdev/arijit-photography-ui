@@ -61,7 +61,7 @@ export default function Home() {
                         textTransform="uppercase"
                         letterSpacing="wide"
                         _hover={{ bg: "white", color: "black" }}
-                        onClick={() => (window.location.href = "portfolio/")}
+                        onClick={() => (window.location.href = "portfolio")}
                     >
                         View Portfolio
                     </Button>
