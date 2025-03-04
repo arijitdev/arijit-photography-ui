@@ -11,7 +11,7 @@ export default function Home() {
                 align="center"
                 justify="center"
                 position="relative"
-                bgImage="url('/photos/LakeBled.jpg')"
+                bgImage="url('/photos/home-background.jpg')"
                 bgSize="cover"
                 bgPos="center"
                 bgRepeat="no-repeat"

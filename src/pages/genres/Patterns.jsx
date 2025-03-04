@@ -19,7 +19,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import { Maximize2, Minimize2 } from "lucide-react"; // ✅ Import Maximize & Minimize icons
 import PageLayout from "../../layouts/PageLayout";
 
-export default function Wildlife() {
+export default function Patterns() {
     const [photos, setPhotos] = useState([]);
     const [loading, setLoading] = useState(true);
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -62,7 +62,7 @@ export default function Wildlife() {
         async function fetchPhotos() {
             try {
                 const response = await fetch(
-                    "https://ilrkmjtzwc.execute-api.us-east-1.amazonaws.com/prod/list?genre=wildlife"
+                    "https://ilrkmjtzwc.execute-api.us-east-1.amazonaws.com/prod/list?genre=patterns"
                 );
                 const data = await response.json();
                 setPhotos(data);
@@ -88,7 +88,7 @@ export default function Wildlife() {
                     letterSpacing="widest"
                     textTransform="uppercase"
                 >
-                    Wildlife
+                    Patterns and Architecture
                 </Heading>
 
                 {loading ? (

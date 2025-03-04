@@ -28,7 +28,7 @@ export default function Header() {
                 textTransform="uppercase"
             >
                 <Image
-                    src="/photos/LogoForDarkBackground.png"
+                    src="/photos/website-logo.png"
                     height="70px" // Adjusted size for better visibility without increasing header height
                     objectFit="contain"
                 />

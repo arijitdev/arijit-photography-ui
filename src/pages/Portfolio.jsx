@@ -30,6 +30,11 @@ export default function Portfolio() {
             src: "/photos/aerials-thumb.jpg",
             link: "/portfolio/aerials",
         },
+        {
+            name: "Architecture and Patterns",
+            src: "/photos/patterns-thumb.jpg",
+            link: "/portfolio/patterns",
+        }
     ];
 
     return (

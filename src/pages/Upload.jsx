@@ -69,10 +69,10 @@ export default function UploadForm() {
             }
 
             // 2) We got a presignedUrl back
-            const presignedUrl = data.presignedUrl;
+            const presigned_url = data.presigned_url;
 
-            // 3) PUT the file to S3 using the presignedUrl
-            const s3Res = await fetch(presignedUrl, {
+            // 3) PUT the file to S3 using the presigned_url
+            const s3Res = await fetch(presigned_url, {
                 method: "PUT",
                 headers: {
                     "Content-Type": file.type

@@ -1,62 +1,103 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     Box,
-    Heading,
     SimpleGrid,
     Image,
+    Heading,
+    Spinner,
     useDisclosure,
     Modal,
     ModalOverlay,
     ModalContent,
     ModalBody,
     ModalCloseButton,
-    IconButton,
     Flex,
+    IconButton,
     Text
 } from "@chakra-ui/react";
 import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
+import { Maximize2, Minimize2 } from "lucide-react"; // ✅ Import Maximize & Minimize icons
 import PageLayout from "../../layouts/PageLayout";
-import photos from "../../data/photos"; // full array or a separate “aerial” array
 
 export default function Aerial() {
+    const [photos, setPhotos] = useState([]);
+    const [loading, setLoading] = useState(true);
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedImageTitle, setSelectedImageTitle] = useState(null);
     const [lightboxIndex, setLightboxIndex] = useState(0);
+    const [isFullScreen, setIsFullScreen] = useState(false);
 
-    // If you have a single photos array with categories, filter them:
-    const aerialPhotos = photos.filter((photo) => photo.category === "aerial");
-
+    // ✅ Open lightbox with selected image
     const handleOpenLightbox = (index) => {
+        setSelectedImage(photos[index].image_url);
+        setSelectedImageTitle(photos[index].title);
         setLightboxIndex(index);
+        setIsFullScreen(false); // Ensure it starts in normal mode
         onOpen();
     };
 
-    const handlePrev = () => {
-        setLightboxIndex((i) => (i === 0 ? aerialPhotos.length - 1 : i - 1));
+    // ✅ Toggle Fullscreen Mode
+    const handleToggleFullscreen = () => {
+        setIsFullScreen(!isFullScreen);
     };
 
-    const handleNext = () => {
-        setLightboxIndex((i) => (i === aerialPhotos.length - 1 ? 0 : i + 1));
+    // ✅ Navigate to Previous Image
+    const handlePrev = () => {
+        const newIndex = lightboxIndex === 0 ? photos.length - 1 : lightboxIndex - 1;
+        setLightboxIndex(newIndex);
+        setSelectedImage(photos[newIndex].image_url);
+        setSelectedImageTitle(photos[newIndex].title);
     };
+
+    // ✅ Navigate to Next Image
+    const handleNext = () => {
+        const newIndex = lightboxIndex === photos.length - 1 ? 0 : lightboxIndex + 1;
+        setLightboxIndex(newIndex);
+        setSelectedImage(photos[newIndex].image_url);
+        setSelectedImageTitle(photos[newIndex].title);
+    };
+
+    useEffect(() => {
+        async function fetchPhotos() {
+            try {
+                const response = await fetch(
+                    "https://ilrkmjtzwc.execute-api.us-east-1.amazonaws.com/prod/list?genre=aerial"
+                );
+                const data = await response.json();
+                setPhotos(data);
+            } catch (error) {
+                console.error("Error fetching photos:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchPhotos();
+    }, []);
 
     return (
         <PageLayout>
-            <Flex flex="1" minH="85vh" bgColor="#27272b" fontFamily="'Cinzel', serif" width="100%">
-                <Box py={16} px={16} bgColor="#27272b" color="white">
-                    <Heading
-                        size="xl"
-                        textAlign="center"
-                        mb={10}
-                        fontFamily="'Cinzel', serif"
-                        fontWeight="100"
-                        letterSpacing="widest"
-                        textTransform="uppercase"
-                    >
-                        Aerial
-                    </Heading>
+            <Box py={16} px={16} bgColor="#27272b" color="white" minH="85vh">
+                <Heading
+                    size="xl"
+                    textAlign="center"
+                    mb={10}
+                    fontFamily="'Cinzel', serif"
+                    fontWeight="100"
+                    letterSpacing="widest"
+                    textTransform="uppercase"
+                >
+                    Birds's Eye
+                </Heading>
+
+                {loading ? (
+                    <Spinner size="xl" />
+                ) : (
                     <SimpleGrid columns={{ base: 2, md: 3, lg: 4 }} spacing={6}>
-                        {aerialPhotos.map((photo, index) => (
+                        {photos.map((photo, index) => (
                             <Box
-                                key={photo.src}
+                                key={index}
                                 cursor="pointer"
                                 onClick={() => handleOpenLightbox(index)}
                                 overflow="hidden"
@@ -64,8 +105,8 @@ export default function Aerial() {
                                 boxShadow="md"
                             >
                                 <Image
-                                    src={photo.src}
-                                    alt={photo.src}
+                                    src={photo.image_url}
+                                    alt={photo.title}
                                     objectFit="cover"
                                     w="100%"
                                     h="200px"
@@ -75,53 +116,96 @@ export default function Aerial() {
                             </Box>
                         ))}
                     </SimpleGrid>
-                </Box>
-                {/* Lightbox Modal */}
-                <Modal isOpen={isOpen} onClose={onClose} size="4xl" isCentered>
-                    <ModalOverlay />
-                    <ModalContent bg="#27272b">
-                        <ModalCloseButton color="white" />
-                        <ModalBody display="flex" justifyContent="center" alignItems="center" p={4}>
+                )}
+            </Box>
+
+            {/* Modal to show enlarged image */}
+            <Modal isOpen={isOpen} onClose={onClose} size="4xl" isCentered>
+                <ModalOverlay />
+                <ModalContent
+                    bg="#27272b"
+                    maxW={isFullScreen ? "100vw" : "4xl"}
+                    maxH={isFullScreen ? "100vh" : "auto"}
+                    position="relative"
+                >
+                    {/* ✅ Icons Container (Sticks to Top Corners) */}
+                    <Flex
+                        justify="space-between"
+                        align="center"
+                        position="absolute"
+                        top={4}
+                        left={4}
+                        right={4}
+                        zIndex="2"
+                    >
+                        {/* ✅ Maximize / Minimize Button - Top Left */}
+                        <IconButton
+                            icon={isFullScreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />} // ✅ Toggle icon
+                            onClick={handleToggleFullscreen}
+                            aria-label="Toggle Fullscreen"
+                            variant="outline"
+                            color="white"
+                            borderColor="whiteAlpha.800"
+                            _hover={{ bg: "whiteAlpha.200" }}
+                        />
+
+                        {/* ✅ Close Button - Top Right (With Border) */}
+                        <IconButton
+                            onClick={onClose}
+                            aria-label="Close"
+                            variant="outline"
+                            color="white"
+                            borderColor="whiteAlpha.800"
+                            _hover={{ bg: "whiteAlpha.200" }}
+                            icon={<ModalCloseButton position="static" color="white" />}
+                        />
+                    </Flex>
+
+                    {/* ✅ Enlarged Image with Fullscreen Support */}
+                    <ModalBody display="flex" justifyContent="center" alignItems="center" p={4}>
+                        {selectedImage && (
                             <Image
-                                src={aerialPhotos[lightboxIndex].src}
-                                alt={aerialPhotos[lightboxIndex].src}
-                                maxH="80vh"
+                                src={selectedImage}
+                                maxH={isFullScreen ? "100vh" : "80vh"} // ✅ Image maximizes properly
+                                maxW={isFullScreen ? "100vw" : "auto"}
                                 objectFit="contain"
                             />
-                        </ModalBody>
-                        <Flex justify="space-between" align="center" px={6} pb={6}>
-                            <IconButton
-                                icon={<ArrowLeftIcon />}
-                                onClick={handlePrev}
-                                aria-label="Previous"
-                                variant="outline"
-                                color="white"
-                                borderColor="whiteAlpha.800"
-                                _hover={{ bg: "whiteAlpha.200" }}
-                            />
-                            <Box mt={2} textAlign="center"
-                                 fontFamily="'Cinzel', serif"
-                                 fontWeight="100"
-                                 letterSpacing="wider"
-                                 textTransform="uppercase"
-                                 color="white">
-                                <Text fontSize="lg" fontWeight="bold" >
-                                    {aerialPhotos[lightboxIndex].title}
-                                </Text>
-                            </Box>
-                            <IconButton
-                                icon={<ArrowRightIcon />}
-                                onClick={handleNext}
-                                aria-label="Next"
-                                variant="outline"
-                                color="white"
-                                borderColor="whiteAlpha.800"
-                                _hover={{ bg: "whiteAlpha.200" }}
-                            />
-                        </Flex>
-                    </ModalContent>
-                </Modal>
-            </Flex>
+                        )}
+                    </ModalBody>
+
+                    {/* ✅ Navigation Controls */}
+                    <Flex justify="space-between" align="center" px={6} pb={6}>
+                        <IconButton
+                            icon={<ArrowLeftIcon />}
+                            onClick={handlePrev}
+                            aria-label="Previous"
+                            variant="outline"
+                            color="white"
+                            borderColor="whiteAlpha.800"
+                            _hover={{ bg: "whiteAlpha.200" }}
+                        />
+                        <Box mt={2} textAlign="center"
+                             fontFamily="'Cinzel', serif"
+                             fontWeight="100"
+                             letterSpacing="wider"
+                             textTransform="uppercase"
+                             color="white">
+                            <Text fontSize="lg" fontWeight="bold">
+                                {selectedImageTitle}
+                            </Text>
+                        </Box>
+                        <IconButton
+                            icon={<ArrowRightIcon />}
+                            onClick={handleNext}
+                            aria-label="Next"
+                            variant="outline"
+                            color="white"
+                            borderColor="whiteAlpha.800"
+                            _hover={{ bg: "whiteAlpha.200" }}
+                        />
+                    </Flex>
+                </ModalContent>
+            </Modal>
         </PageLayout>
     );
 }
