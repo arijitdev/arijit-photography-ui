@@ -53,8 +53,9 @@ export default function UploadForm() {
                 exif
             };
 
+
             // Replace with your actual API Gateway endpoint
-            const res = await fetch("https://<api-id>.execute-api.<region>.amazonaws.com/prod/upload", {
+            const res = await fetch("https://ilrkmjtzwc.execute-api.us-east-1.amazonaws.com/prod/upload", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
