@@ -24,7 +24,7 @@ export default function App() {
             <Route path="/portfolio/patterns" element={<Patterns />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/upload" element={<Upload />} />
+            <Route path="/photo-upload" element={<Upload />} />
         </Routes>
     );
 }
