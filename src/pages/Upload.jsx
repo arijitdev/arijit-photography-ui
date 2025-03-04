@@ -144,6 +144,7 @@ export default function UploadForm() {
                                     <Checkbox value="travel">Travel</Checkbox>
                                     <Checkbox value="wildlife">Wildlife</Checkbox>
                                     <Checkbox value="aerial">Aerial</Checkbox>
+                                    <Checkbox value="patterns">Patterns</Checkbox>
                                 </Stack>
                             </CheckboxGroup>
                         </FormControl>
