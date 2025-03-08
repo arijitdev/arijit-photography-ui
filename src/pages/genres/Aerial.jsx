@@ -88,7 +88,7 @@ export default function Aerial() {
                     letterSpacing="widest"
                     textTransform="uppercase"
                 >
-                    Birds's Eye
+                    Aerials
                 </Heading>
 
                 {loading ? (

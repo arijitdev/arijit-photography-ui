@@ -88,7 +88,7 @@ export default function Patterns() {
                     letterSpacing="widest"
                     textTransform="uppercase"
                 >
-                    Patterns and Architecture
+                    Patterns & Architecture
                 </Heading>
 
                 {loading ? (
