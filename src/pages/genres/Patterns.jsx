@@ -85,7 +85,7 @@ export default function Patterns() {
                     mb={10}
                     fontFamily="'Cinzel', serif"
                     fontWeight="100"
-                    letterSpacing="widest"
+                    letterSpacing="wide"
                     textTransform="uppercase"
                 >
                     Architecture & Patterns
